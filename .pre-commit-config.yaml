@@ -15,12 +15,6 @@ repos:
     - id: check-case-conflict
     - id: check-merge-conflict
     - id: debug-statements
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.14.14
-  hooks:
-    - id: ruff-check
-      args: [ --fix ]
-    - id: ruff-format
 - repo: https://github.com/executablebooks/mdformat
   rev: 0.7.17
   hooks:
