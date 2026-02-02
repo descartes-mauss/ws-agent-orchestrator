@@ -1,5 +1,5 @@
 import os
-from typing import Any, List, Optional, Type
+from typing import Any
 
 from dotenv import load_dotenv
 from sqlmodel import SQLModel, select
@@ -19,7 +19,7 @@ db = DBSession(
 )
 
 
-def get_all(model: Type[SQLModel], tenant_schema: Optional[str] = None) -> List[Any]:
+def get_all(model: type[SQLModel], tenant_schema: str | None = None) -> list[Any]:
     """Fetch all rows for the given SqlModel `model`."""
     if tenant_schema:
         with db.tenant_session(tenant_schema) as session:
@@ -30,9 +30,7 @@ def get_all(model: Type[SQLModel], tenant_schema: Optional[str] = None) -> List[
         return session.exec(select(model)).all()
 
 
-def get_by_id(
-    model: Type[SQLModel], id: Any, tenant_schema: Optional[str] = None
-) -> Optional[Any]:
+def get_by_id(model: type[SQLModel], id: Any, tenant_schema: str | None = None) -> Any | None:
     """Fetch a single row by ID for the given SqlModel `model`."""
     if tenant_schema:
         with db.tenant_session(tenant_schema) as session:

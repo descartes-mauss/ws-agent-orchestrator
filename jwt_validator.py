@@ -8,7 +8,9 @@ ALGORITHM = "HS256"
 BEARER_HEADER = HTTPBearer()
 
 
-def validate_jwt(credentials: HTTPAuthorizationCredentials = Depends(BEARER_HEADER)):
+def validate_jwt(
+    credentials: HTTPAuthorizationCredentials = Depends(BEARER_HEADER),
+):
     """
     Dependency that validates a JWT from `Authorization: Bearer <JWT_TOKEN>`
     """

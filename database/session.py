@@ -8,9 +8,7 @@ from sqlmodel import Session
 class DBSession:
     def __init__(self, db_url: str):
         self.engine = create_engine(db_url, pool_pre_ping=True, future=True)
-        self.SessionLocal = sessionmaker(
-            bind=self.engine, class_=Session, expire_on_commit=False
-        )
+        self.SessionLocal = sessionmaker(bind=self.engine, class_=Session, expire_on_commit=False)
 
     @contextmanager
     def session(self):

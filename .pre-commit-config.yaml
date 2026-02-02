@@ -30,13 +30,13 @@ repos:
         - mdformat-gfm
 - repo: local
   hooks:
-    - id: isort-format
-      name: isort-format
-      entry: bash -c "isort ."
-      language: python
-- repo: local
-  hooks:
     - id: black-format
       name: black-format
       entry: bash -c "black ."
+      language: python
+- repo: local
+  hooks:
+    - id: isort-format
+      name: isort-format
+      entry: bash -c "isort ."
       language: python
