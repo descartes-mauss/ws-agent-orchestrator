@@ -3,10 +3,8 @@ from fastapi.responses import JSONResponse
 
 from database.manager import get_all
 from database.models.public_models import Client
-
-from jwt_validator import validate_jwt
-
 from database.models.tenant_models import SOW
+from jwt_validator import validate_jwt
 
 app = FastAPI()
 
