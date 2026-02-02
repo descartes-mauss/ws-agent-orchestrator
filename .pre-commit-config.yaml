@@ -37,6 +37,6 @@ repos:
 - repo: local
   hooks:
     - id: black-format
-      name: isort-format
+      name: black-format
       entry: bash -c "black ."
       language: python
