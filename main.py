@@ -21,7 +21,7 @@ router = APIRouter(prefix="/api", dependencies=[Depends(validate_jwt)])
 @app.get("/")
 def read_root():
     clients: list[Client] = get_all(Client)
-    logger.info("Total number of clients %s", len(clients))
+    print(f"Total number of clients {len(clients)}")
     return JSONResponse(status_code=200, content=jsonable_encoder({"clients": clients}))
 
 
@@ -34,9 +34,9 @@ def base():
 def protected(authorization: dict = Depends(validate_jwt)):
     org_id = authorization.get("orgId")
     clients: list[Client] = get_all(Client)
-    logger.info("Total number of clients %s", len(clients))
+    print(f"Total number of clients {len(clients)}")
     sows: list[SOW] = get_all(SOW, tenant_schema=org_id)
-    logger.info("Total number of SOWs %s", len(sows))
+    print(f"Total number of SOWs {len(sows)}")
     return JSONResponse(
         status_code=200,
         content=jsonable_encoder({"clients": clients, "sows": sows}),
