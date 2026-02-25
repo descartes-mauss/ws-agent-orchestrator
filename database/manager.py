@@ -24,10 +24,10 @@ def get_all(model: type[SQLModel], tenant_schema: str | None = None) -> list[Any
     if tenant_schema:
         with db.tenant_session(tenant_schema) as session:
             statement = select(model)
-            return session.exec(statement).all()
+            return session.exec(statement).all()  # type: ignore[no-any-return]
 
     with db.session() as session:
-        return session.exec(select(model)).all()
+        return session.exec(select(model)).all()  # type: ignore[no-any-return]
 
 
 def get_by_id(model: type[SQLModel], id: Any, tenant_schema: str | None = None) -> Any | None:

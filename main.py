@@ -1,46 +1,16 @@
-import logging
 import asyncio
-import random
 import datetime
+import logging
+import random
 
 from fastapi import APIRouter, Depends, FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 
-from database.manager import get_all
-from database.models.public_models import Client
-from database.models.tenant_models import SOW
 from jwt_validator import validate_jwt
 
 app = FastAPI()
 logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/api", dependencies=[Depends(validate_jwt)])
-
-
-@app.get("/")
-def read_root():
-    clients: list[Client] = get_all(Client)
-    logger.info("Total number of clients %s", len(clients))
-    return JSONResponse(status_code=200, content=jsonable_encoder({"clients": clients}))
-
-
-@app.get("/api/error")
-def base():
-    return JSONResponse(status_code=500, content={"status": "Error endpoint"})
-
-
-@app.post("/api/protected")
-def protected(authorization: dict = Depends(validate_jwt)):
-    org_id = authorization.get("orgId")
-    clients: list[Client] = get_all(Client)
-    logger.info("Total number of clients %s", len(clients))
-    sows: list[SOW] = get_all(SOW, tenant_schema=org_id)
-    logger.info("Total number of SOWs %s", len(sows))
-    return JSONResponse(
-        status_code=200,
-        content=jsonable_encoder({"clients": clients, "sows": sows}),
-    )
 
 
 async def simulate_processing(message: str) -> str:
@@ -56,33 +26,33 @@ async def simulate_processing(message: str) -> str:
         parts = text.split()
         return " ".join(parts[:count]) if parts else text
 
-    short = _summary(message, 100)
-    keys = _keywords(message, 6)
+    _summary(message, 100)
+    _keywords(message, 6)
 
     templates = [
         # Text Message
         lambda m: {
-            "text": f"Hello {now}. Assistant: Received your message: \"{_summary(m)}\". Nice!",
-            "type": "text"
+            "text": f'Hello {now}. Assistant: Received your message: "{_summary(m)}". Nice!',
+            "type": "text",
         },
         # Image Message (simulated with a URL)
         lambda m: {
             "text": f"Hello {now}. Assistant: Here's an image related to your message:",
             "type": "image",
-            "image_url": "https://placehold.co/150"
+            "image_url": "https://placehold.co/150",
         },
         # Video Message (simulated with a URL)
         lambda m: {
             "text": f"Hello {now}. Assistant: Check out this video that might help:",
             "type": "video",
             "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-            "thumbnail_url": "https://placehold.co/300x200"
+            "thumbnail_url": "https://placehold.co/300x200",
         },
         # Code Snippet Message
         lambda m: {
             "text": f"Hello {now}. Assistant: Here's a code snippet based on your message:",
             "type": "code",
-            "code": f"print('You said: {_summary(m)}')"
+            "code": f"print('You said: {_summary(m)}')",
         },
     ]
 
@@ -92,8 +62,8 @@ async def simulate_processing(message: str) -> str:
     return reply
 
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+@app.websocket("/")
+async def websocket_endpoint(websocket: WebSocket) -> None:
     await websocket.accept()
     try:
         while True:
